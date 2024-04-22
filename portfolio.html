@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Additional styles for the modal */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 9999; /* Sit on top */
+      padding-top: 50px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+    }
+
+    /* Modal content */
+    .modal-content {
+      margin: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 80%; /* Limit maximum width */
+      max-height: 80vh; /* Limit maximum height to 80% of viewport height */
+      position: relative; /* Needed for video controls positioning */
+    }
+
+    .modal-content img,
+    .modal-content video {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* Close button */
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      z-index: 10000; /* Ensure close button is on top */
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Slideshow navigation buttons */
+    .prev,
+    .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: auto;
+      padding: 20px; /* Increased padding */
+      margin-top: -30px; /* Adjusted margin */
+      color: white;
+      font-weight: bold;
+      font-size: 24px; /* Increased font size */
+      cursor: pointer;
+      z-index: 10000;
+      background-color: rgba(0, 0, 0, 0);
+      border: none;
+      border-radius: 5px;
+    }
+    
+
+    .prev {
+      left: 10px;
+    }
+
+    .next {
+      right: 10px;
+    }
+
+    /* Fullscreen button */
+    .fullscreen-button {
+      font-size: 20px; /* Set font size */
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="gallery">
+  <input type="checkbox">
+  <img src="img/1.1.jpg" alt="Thumbnail 1" onclick="openModal(1)" class="hover-shadow thumbnail1">
+  <img src="img/2.1.jpg" alt="Thumbnail 2" onclick="openModal(2)" class="hover-shadow">
+  <img src="img/3.1.jpg" alt="Thumbnail 3" onclick="openModal(3)" class="hover-shadow">
+  <img src="img/4.1.jpg" alt="Thumbnail 4" onclick="openModal(4)" class="hover-shadow">
+  <img src="img/5.1.jpg" alt="Thumbnail 5" onclick="openModal(5)" class="hover-shadow">
+  <img src="img/6.1.jpg" alt="Thumbnail 6" onclick="openModal(6)" class="hover-shadow">
+  <img src="img/7.1.jpg" alt="Thumbnail 7" onclick="openModal(7)" class="hover-shadow">
+  <img src="img/8.1.jpg" alt="Thumbnail 8" onclick="openModal(8)" class="hover-shadow">
+  <img src="img/9.1.jpg" alt="Thumbnail 9" onclick="openModal(9)" class="hover-shadow">
+</div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <div class="modal-content">
+    <div id="mediaContainer" class="modal-media-container"></div>
+    <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
+    <button class="next" onclick="plusSlides(1)">&#10095;</button>
+  </div>
+</div>
+
+<script>
+  // Define image sets for each thumbnail
+  const imageSets = {
+    1: ['ex4d.png', 'home.png', 'repetition.png', 'duration.png'],
+    2: ['ex6d.png', 's1.png', 's2.png', 's3.png', 's4.png', 's5.png', 's6.png', 's7.png'],
+    3: ['ex8d.png', 'tiktok1.png', 'tiktok2.png'],
+    4: ['lab3d.png', 'l31.png', 'l32.png', 'l33.png'],
+    5: ['lab4d.png', 'l41.png', 'l42.png'],
+    6: ['lab5d.png', 'emap1.png', 'emap2.png', 'emap3.png'],
+    7: ['lab3.gif', 'lab3v.mp4'],
+    8: ['lab4.gif', 'lab4v.mp4'],
+    9: ['lab5.gif', 'lab5v.mp4']
+  };
+
+  let currentThumbnailIndex; // Current thumbnail index
+  let slideIndex = 0; // Current slide index
+
+  // Open the modal with the selected media
+  function openModal(thumbnailIndex) {
+    const modal = document.getElementById("myModal");
+    const mediaContainer = document.getElementById("mediaContainer");
+    currentThumbnailIndex = thumbnailIndex; // Set current thumbnail index
+    slideIndex = 0; // Reset slide index when opening modal
+
+    // Load media for the selected thumbnail
+    const media = imageSets[thumbnailIndex];
+
+    // If there are media, display the first one in the slideshow
+    if (media && media.length > 0) {
+      const firstMedia = media[0];
+      if (firstMedia.endsWith('.mp4')) {
+        const video = document.createElement('video');
+        video.src = 'videos/' + firstMedia;
+        video.autoplay = false; // Autoplay the video
+        video.muted = true; // Mute the video
+        video.controls = true; // Show browser controls
+        mediaContainer.innerHTML = ''; // Clear existing content
+        mediaContainer.appendChild(video);
+      } else {
+        const img = document.createElement('img');
+        img.src = 'img/' + firstMedia;
+        mediaContainer.innerHTML = ''; // Clear existing content
+        mediaContainer.appendChild(img);
+      }
+      
+      modal.style.display = "flex";
+      modal.style.alignItems = "center";
+    }
+  }
+
+  // Close the modal
+  function closeModal() {
+    const modal = document.getElementById("myModal");
+    const mediaContainer = document.getElementById("mediaContainer");
+
+    mediaContainer.innerHTML = ''; // Clear media container
+    modal.style.display = "none";
+  }
+
+  // Next/previous controls for the slideshow
+  function plusSlides(n) {
+    slideIndex += n;
+    showSlides();
+  }
+
+  // Display the current slide
+  function showSlides() {
+    const mediaContainer = document.getElementById("mediaContainer");
+    const media = imageSets[currentThumbnailIndex];
+
+    // If there are no media or slide index is out of bounds, do nothing
+    if (!media || slideIndex >= media.length || slideIndex < 0) return;
+
+    const currentMedia = media[slideIndex];
+    if (currentMedia.endsWith('.mp4')) {
+      const video = document.createElement('video');
+      video.src = 'videos/' + currentMedia;
+      video.autoplay = false; // Autoplay the video
+      video.muted = true; // Mute the video
+      video.controls = true; // Show browser controls
+      mediaContainer.innerHTML = ''; // Clear existing content
+      mediaContainer.appendChild(video);
+    } else {
+      const img = document.createElement('img');
+      img.src = 'img/' + currentMedia;
+      mediaContainer.innerHTML = ''; // Clear existing content
+      mediaContainer.appendChild(img);
+    }
+  }
+
+  // Listen for keyboard arrow keys
+  document.onkeydown = function (e) {
+    e = e || window.event;
+    if (e.keyCode == '37') { // Left arrow key
+      plusSlides(-1);
+    } else if (e.keyCode == '39') { // Right arrow key
+      plusSlides(1);
+    }
+  };
+</script>
+
+</body>
+</html>
